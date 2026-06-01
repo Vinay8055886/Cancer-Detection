@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head><title>Admin Dashboard</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <h1 class="brand">Admin / Doctor Dashboard</h1>
+      <nav>
+        <a href="{{ url_for('index') }}">Home</a> |
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </header>
+    <section class="panel">
+      <div class="card">
+        <h3>Upcoming Appointments</h3>
+        <ul>
+          {% for a in appts %}
+            <li>{{ a.created_at }} — {{ a.patient_name }} — {{ a.phone }} — {{ a.status }} {% if a.hospital_reference %}(ref: {{ a.hospital_reference }}){% endif %}</li>
+          {% else %}
+            <li>No appointments</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Recent Predictions</h3>
+        <ul>
+          {% for p in preds %}
+            <li>{{ p.created_at }} — {{ p.result }} — user_id: {{ p.user_id }}</li>
+          {% else %}
+            <li>No predictions</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Upload new model</h3>
+        <form method="post" action="/upload_model" enctype="multipart/form-data">
+          <input type="file" name="model_file" accept=".h5" required><br/><br/>
+          <input type="submit" value="Upload model (.h5)" class="btn">
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head><title>Dashboard</title><link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"></head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <h1 class="brand">Dashboard</h1>
+      <nav>
+        <a href="{{ url_for('index') }}">Home</a> |
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </nav>
+    </header>
+    <section class="panel">
+      <div class="card">
+        <h3>Your recent predictions</h3>
+        <ul>
+          {% for p in preds %}
+            <li>{{ p.created_at }} — {{ p.result }} ({{ '%.2f'|format(p.probability) }})</li>
+          {% else %}
+            <li>No predictions yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Your appointments</h3>
+        <ul>
+          {% for a in appts %}
+            <li>{{ a.created_at }} — {{ a.patient_name }} — {{ a.status }} {% if a.hospital_reference %} (ref: {{ a.hospital_reference }}){% endif %}</li>
+          {% else %}
+            <li>No appointments yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Analyze an image (server-side)</h3>
+        <form method="post" action="/predict_server" enctype="multipart/form-data">
+          <input type="file" name="image" accept="image/*" required><br/><br/>
+          <select name="language">
+            <option value="en">English</option>
+            <option value="hi">Hindi</option>
+            <option value="ta">Tamil</option>
+            <option value="kn">Kannada</option>
+            <option value="bn">Bengali</option>
+            <option value="mr">Marathi</option>
+          </select>
+          <input type="submit" value="Analyze" class="btn primary">
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
